@@ -8,6 +8,7 @@ import { TypeScriptWalker } from '../walker/TypeScriptWalker.js';
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -54,9 +55,9 @@ githubApp.webhooks.on(['pull_request.opened', 'pull_request.reopened'], async ({
   const headRef = payload.pull_request.head.ref;
   const headRepoCloneUrl = payload.pull_request.head.repo.clone_url;
   
-  // Create a unique temp folder path inside the workspace's temp/ directory
+  // Create a unique temp folder path inside the system temp directory (for Cloud Run compatibility)
   const tempDirName = `temp-pr-${prNumber}-${Date.now()}`;
-  const tempDirPath = path.resolve('temp', tempDirName);
+  const tempDirPath = path.join(os.tmpdir(), tempDirName);
   
   let blastRadius: any = null;
   
