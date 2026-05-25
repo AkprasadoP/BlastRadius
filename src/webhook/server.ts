@@ -18,6 +18,11 @@ const PORT = process.env.PORT || 3000;
 
 // CRITICAL: Do NOT use app.use(express.json()) globally. It will break GitHub's signature validation.
 
+// Root route for UptimeRobot health check to prevent 404s
+app.get('/', (req, res) => {
+  res.status(200).send('🤖 Blastradius Requirement Compliance Engine is online.');
+});
+
 app.use(createNodeMiddleware(githubApp.webhooks, { path: '/api/webhook' }));
 
 githubApp.webhooks.on(['pull_request.opened', 'pull_request.reopened'], async ({ payload }) => {
