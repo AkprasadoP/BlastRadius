@@ -25,27 +25,41 @@ Evaluate if the structural changes in the code fulfill the requirements of the t
 Return the result adhering to the required JSON schema.
   `;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: prompt,
-    config: {
-      responseMimeType: 'application/json',
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          confidence_score: { type: Type.INTEGER, description: 'Confidence score from 0-100' },
-          divergence_flagged: { type: Type.BOOLEAN, description: 'True if there are unintended side effects or unmet requirements' },
-          reasoning_trace: { type: Type.STRING, description: 'Step-by-step reasoning for the evaluation' },
-          summary_for_comment: { type: Type.STRING, description: 'Markdown formatted summary to post on the PR' }
-        },
-        required: ['confidence_score', 'divergence_flagged', 'reasoning_trace', 'summary_for_comment']
+  let lastError: any;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              confidence_score: { type: Type.INTEGER, description: 'Confidence score from 0-100' },
+              divergence_flagged: { type: Type.BOOLEAN, description: 'True if there are unintended side effects or unmet requirements' },
+              reasoning_trace: { type: Type.STRING, description: 'Step-by-step reasoning for the evaluation' },
+              summary_for_comment: { type: Type.STRING, description: 'Markdown formatted summary to post on the PR' }
+            },
+            required: ['confidence_score', 'divergence_flagged', 'reasoning_trace', 'summary_for_comment']
+          }
+        }
+      });
+
+      if (!response.text) {
+        throw new Error('No text returned from Gemini');
+      }
+
+      return JSON.parse(response.text) as IntentEvaluation;
+    } catch (error) {
+      console.warn(`Gemini API attempt ${attempt} failed:`, error);
+      lastError = error;
+      if (attempt < 3) {
+        // Wait 2s, 4s before retrying
+        await new Promise((resolve) => setTimeout(resolve, attempt * 2000));
       }
     }
-  });
-
-  if (!response.text) {
-    throw new Error('No text returned from Gemini');
   }
 
-  return JSON.parse(response.text) as IntentEvaluation;
+  throw lastError;
 }
