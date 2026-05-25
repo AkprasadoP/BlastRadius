@@ -1,0 +1,29 @@
+{
+  "name": "pr-bot-blast-radius",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "start": "tsx src/webhook/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^2.5.0",
+    "@linear/sdk": "^85.0.0",
+    "@octokit/app": "^16.1.2",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "ts-morph": "^28.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.1",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7"
+  }
+}
