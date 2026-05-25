@@ -6,7 +6,7 @@
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
 [![Built with Gemini](https://img.shields.io/badge/AI-Gemini%202.5--Flash-orange.svg)](https://ai.google.dev/)
 
-![Blast Radius Bot Demo](assets/demo.gif)
+<img width="720" height="406" alt="Video Project 7" src="https://github.com/user-attachments/assets/f7e1c161-e0d1-4a8d-a0a5-3a2ed48371ed" />
 
 ---
 
