@@ -21,6 +21,16 @@ When a developer changes a harmless-looking analytics file and it silently touch
 
 ---
 
+## 🎯 V1 Scope: The TypeScript Wedge
+
+Generic AI code reviewers hallucinate because they try to read Python, Go, Rust, and Java all at once using basic text pattern matching. 
+
+**Blastradius V1 does not guess.** We intentionally restricted V1 strictly to **TypeScript/JavaScript** repositories. By tying the engine directly to the TypeScript Compiler API (`ts-morph`), we guarantee **100% deterministic AST mapping**. The bot knows exactly which downstream files import your modified functions, completely eliminating AI hallucinations from the blast radius calculation. 
+
+*(Support for Go and Python using `Tree-sitter` is planned for V2. Check the roadmap!)*
+
+---
+
 ## ⚙️ How It Works
 
 Here is the deterministic pipeline that executes on every pull request event:
